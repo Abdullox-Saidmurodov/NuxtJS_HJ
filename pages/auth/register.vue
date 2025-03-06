@@ -12,12 +12,24 @@ const form = ref<PAYLOAD>({
     password: ''
 })
 
+const onSubmit = async () => {
+  try {
+    await $fetch('/api/auth/register', {
+      method: 'POST',
+      body: form.value
+    })
+    
+    navigateTo('/')
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <template>
     <div class="flex flex-col justify-center items-center min-h-screen">
         <div class="w-full max-w-md">
-            <form action="">
+            <form @submit.prevent="onSubmit" action="">
                 <Card>
                     <CardHeader>
                       <CardTitle class="text-2xl">
@@ -41,12 +53,13 @@ const form = ref<PAYLOAD>({
                         <Input id="password" type="password" v-model="form.password" required />
                       </div>
                       <div class="grid grid-cols-1">
-                        <Button type="button" variant="outline">
+                        <!-- <Button type="button" variant="outline">
                             <div class="flex items-center">
                                 <Icon name="radix-icons:github-logo" class="mr-2 h-4 w-4"></Icon>
                                 Github
                             </div>
-                        </Button>
+                        </Button> -->
+                        <AuthSocialButton icon="radix-icons:github-logo" label="Github" />
                       </div>
                     </CardContent>
                     <CardFooter class="flex-col space-y-2">

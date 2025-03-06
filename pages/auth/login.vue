@@ -10,12 +10,25 @@ const form = ref<PAYLOAD>({
     password: ''
 })
 
+const onSubmit = async () => {
+  try {
+    await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: form.value
+    })
+    
+    navigateTo('/')
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 </script>
 
 <template>
     <div class="flex flex-col justify-center items-center min-h-screen">
         <div class="w-full max-w-md">
-            <form action="">
+            <form @submit.prevent="onSubmit" action="">
                 <Card>
                     <CardHeader>
                       <CardTitle class="text-2xl">
@@ -40,7 +53,7 @@ const form = ref<PAYLOAD>({
                     </CardContent>
                     <CardFooter class="flex-col space-y-2">
                       <Button class="w-full" type="submit">
-                        Register
+                        Login
                       </Button>
                       <p>
                         Don't have an account?

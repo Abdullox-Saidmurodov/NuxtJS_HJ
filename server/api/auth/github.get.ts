@@ -18,7 +18,7 @@ export default defineOAuthGitHubEventHandler({
             data: {
                 email: user.email,
                 name: user.name,
-                avatarUrl: user.avatarUrl
+                avatarUrl: user.avatar_url
             }
         })
       }
