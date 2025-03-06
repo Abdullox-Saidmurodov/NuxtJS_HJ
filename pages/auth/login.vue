@@ -10,16 +10,26 @@ const form = ref<PAYLOAD>({
     password: ''
 })
 
+const { toggleLoading, showMessage, showError, isLoading } = useStore()
 const onSubmit = async () => {
   try {
+    toggleLoading(true)
     await $fetch('/api/auth/login', {
       method: 'POST',
       body: form.value
     })
-    
-    navigateTo('/')
+    showMessage({
+      title: 'Welcome Back'
+    })
+    await navigateTo('/')
   } catch (error) {
-    console.error(error)
+    // console.error(error)
+    // console.log(error.response)
+    // console.log(error.response._data)
+    const err = handlerError(error)
+    showError(err)    
+  } finally {
+    toggleLoading(false)
   }
 }
 
@@ -32,7 +42,7 @@ const onSubmit = async () => {
                 <Card>
                     <CardHeader>
                       <CardTitle class="text-2xl">
-                        Login
+                        Login {{ isLoading }}
                       </CardTitle>
                       <CardDescription>
                         Enter your information below to login to your account.
@@ -52,7 +62,7 @@ const onSubmit = async () => {
                       </div>
                     </CardContent>
                     <CardFooter class="flex-col space-y-2">
-                      <Button class="w-full" type="submit">
+                      <Button :disabled="isLoading" class="w-full" type="submit">
                         Login
                       </Button>
                       <p>

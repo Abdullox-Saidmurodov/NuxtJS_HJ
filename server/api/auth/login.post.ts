@@ -23,7 +23,7 @@ export default defineEventHandler(async(event) => {
             }
         })
         if(!connectedOAuthAccount) {
-            const oAuthProvider = connectedOAuthAccount?.providerId
+            const oAuthProvider = connectedOAuthAccount.providerId
 
             throw createError({
                 statusCode: 400,
@@ -40,15 +40,6 @@ export default defineEventHandler(async(event) => {
             })
         }
     }
-    // const hashedPassword = await hashPassword(password)
-
-    // const user = await db.user.create({
-    //     data: {
-    //         email,
-    //         hashedPassword,
-    //         name
-    //     }
-    // })
 
     const transformedUser = sanitizeUser(existingUser)
     if(transformedUser) {
