@@ -42,9 +42,21 @@ const title = ref('Add Category')
 const description = ref('Edit Category')
 const toastMessage = ref('Category Updated')
 const action = ref('Save Changes')
-const isEditing = ref(false)
+const isEditing = ref(true)
+
 const route = useRoute()
 const { data: currentCategory } = await useFetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`)
+
+watchEffect(() => {
+    if(!currentCategory.value) {
+        title.value = 'Create Category'
+        description.value = 'Add a new Category'
+        action.value = 'Create Category'
+        isEditing.value = false
+        toastMessage.value = 'Category Added'
+    }
+})
+
 const formSchema = toTypedSchema(categorySchema)
 const form = useForm({
     validationSchema: formSchema,
@@ -58,20 +70,24 @@ const onSubmit = form.handleSubmit(async (values) => {
         toggleLoading(true)
 
         if(isEditing.value) {
-            console.log('Edit Category ', values)
+            // console.log('Edit Category ', values)
+            const data = await $fetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`, {
+                method: 'PATCH',
+                body: values
+            })
         } else {
             // console.log('Add Category ', values)
-            const data = await $fetch('api/admin/categories', {
+            const data = await $fetch('/api/admin/categories/', {
                 method: 'POST',
                 body: values
             })
-            console.log(data)
+            // console.log(data)
         }
         showMessage({
-            title: title.value
+            title: toastMessage.value
         })
         // TODO refresh data
-        navigateTo('/admin/categories')
+        await navigateTo('/admin/categories')
     } catch (error) {
         const err = handlerError(error)
         showError(err)
@@ -83,7 +99,16 @@ const onSubmit = form.handleSubmit(async (values) => {
 const deleteCategory = async () => {
     try {
         toggleLoading(true)
-        console.log('Delete Category')
+        const data = await $fetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`, {
+            method: 'DELETE',
+        })
+        // console.log(data)
+        // console.log('Delete Category')
+        showMessage({
+            title: title.value
+        })
+        // TODO refresh data
+        await navigateTo('/admin/categories')
     } catch (error) {
         const err = handlerError(error)
         showError(err)
