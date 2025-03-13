@@ -7,7 +7,7 @@
             <Heading :title="title" :description="description">
                 
             </Heading>
-            <Button @click="toggleAlertModal(true)" v-if="isEditing" variant="destructive" size="sm">
+            <Button @click="isAlertModalVisible = !isAlertModalVisible" v-if="isEditing" variant="destructive" size="sm">
                 <Icon name="lucide:trash" class="h-4 w-4"></Icon>
             </Button>
         </div>
@@ -28,7 +28,9 @@
             <Button :disabled="isLoading" type="submit" class="ml-auto">{{ action }}</Button>
         </form>
     </div>
-    <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory"></AlertModal>
+    <!-- <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory"></AlertModal> -->
+    <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory" 
+                :is-open="isAlertModalVisible" @on-close="isAlertModalVisible = false"></AlertModal>
 </template>
 
 <script setup lang="ts">
@@ -36,13 +38,14 @@ import type { RouteParams } from '~/types'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 
-const { isLoading, showMessage, showError, toggleLoading, toggleError, toggleAlertModal, isAlertModalVisible } = useStore()
+const { isLoading, showMessage, showError, toggleLoading, toggleError } = useStore()
 
 const title = ref('Add Category')
 const description = ref('Edit Category')
 const toastMessage = ref('Category Updated')
 const action = ref('Save Changes')
 const isEditing = ref(true)
+const isAlertModalVisible = ref(false)
 
 const route = useRoute()
 const { data: currentCategory } = await useFetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`)

@@ -10,7 +10,8 @@ function copy(id: string) {
     title: 'Category Id'
   })
 }
-const { showMessage, showError, isLoading, isAlertModalVisible, toggleAlertModal, toggleLoading } = useStore()
+const { showMessage, showError, toggleLoading } = useStore()
+const isAlertModalVisible = ref(false)
 const deleteCategory = async () => {
     try {
         toggleLoading(true)
@@ -48,11 +49,12 @@ const deleteCategory = async () => {
             <Icon name="lucide:edit" class="w-4 h-4" />
             <span>Edit</span>
           </DropdownMenuItem>
-          <DropdownMenuItem @click="toggleAlertModal(true)">
+          <DropdownMenuItem @click="isAlertModalVisible = !isAlertModalVisible">
             <Icon name="lucide:trash" class="w-4 h-4" />
             <span>Delete</span>
           </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-  <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory"></AlertModal>
+  <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory" 
+              :is-open="isAlertModalVisible" @on-close="isAlertModalVisible = false"></AlertModal>
 </template>
