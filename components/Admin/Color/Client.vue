@@ -1,9 +1,9 @@
 <template>
     <div class="flex items-center justify-between">
-        <Heading title="Categories" description="Manage Categories">
+        <Heading title="Colors" description="Manage Colors">
             
         </Heading>
-        <NuxtLink to="/admin/categories/new">
+        <NuxtLink to="/admin/colors/new">
             <Button>
                 <Icon name="lucide:plus" class="mr-2 h-4 w-4"></Icon>
                 Add New
@@ -13,21 +13,21 @@
     <!-- <pre>
         {{ data }}
     </pre> -->
-    <!-- @vue-expect-error -->
-    <DataTable v-if="status !== 'pending'" :columns="columns" column-to-search="name" :data="categories ? categories : []"></DataTable>
+    <DataTable v-if="status !== 'pending'" :columns="columns" column-to-search="name" :data="colors ? colors : []"></DataTable>
 </template>
 
 <script setup lang="ts">
 // @ts-ignore
-import { columns } from '@/components/Admin/Category/column'
-const { data: categories, status } = await useFetch('/api/admin/categories', {
-    key: 'categories',
-    transform: (categories) => {
+import { columns } from '~/components/Admin/Color/columns'
+const { data: colors, status } = await useFetch('/api/admin/colors', {
+    key: 'colors',
+    transform: (colors) => {
         // @ts-ignore
-        return categories.map(item => {
+        return colors.map(item => {
             return {
                 id: item.id,
                 name: item.name,
+                value: item.value,
                 createdAt: useDateFormat(new Date(item.createdAt), 'MMMM D, YYYY').value,
             }
         })
