@@ -8,6 +8,7 @@
     <NuxtLink to="/admin" >Admin</NuxtLink>
     <NuxtLink to="/admin/categories" >Categories</NuxtLink>
     <NuxtLink to="/admin/colors" >Colors</NuxtLink>
+    <NuxtLink to="/admin/sizes" >Sizes</NuxtLink>
 
     <button @click="logout">Logout</button>
 </template>

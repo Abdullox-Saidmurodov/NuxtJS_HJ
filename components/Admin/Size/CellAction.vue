@@ -1,28 +1,27 @@
 <script setup lang="ts">
 const props = defineProps<{
-  category: {
+  size: {
     id: string
   }
 }>()
 function copy(id: string) {
   navigator.clipboard.writeText(id)
   showMessage({
-    title: 'Category Id copied'
+    title: 'Size Id copied'
   })
 }
 const { showMessage, showError, toggleLoading } = useStore()
 const isAlertModalVisible = ref(false)
-const deleteCategory = async () => {
+const deleteSize = async () => {
     try {
         toggleLoading(true)
-        const data = await $fetch(`/api/admin/categories/${props.category.id}`, {
+        const data = await $fetch(`/api/admin/sizes/${props.size.id}`, {
             method: 'DELETE',
         })
         showMessage({
-            title: 'Delete Category'
+            title: 'Delete Size'
         })
-        // TODO refresh data
-        refreshNuxtData('categories')
+        refreshNuxtData('sizes')
     } catch (error) {
         const err = handlerError(error)
         showError(err)
@@ -41,11 +40,11 @@ const deleteCategory = async () => {
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-          <DropdownMenuItem @click="copy(category.id)">
+          <DropdownMenuItem @click="copy(size.id)">
             <Icon name="lucide:copy" class="w-4 h-4" />
             <span>Copy ID</span>
           </DropdownMenuItem>
-          <DropdownMenuItem @click="navigateTo(`/admin/categories/${category.id}`)">
+          <DropdownMenuItem @click="navigateTo(`/admin/sizes/${size.id}`)">
             <Icon name="lucide:edit" class="w-4 h-4" />
             <span>Edit</span>
           </DropdownMenuItem>
@@ -55,6 +54,6 @@ const deleteCategory = async () => {
           </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-  <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory" 
+  <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteSize" 
               :is-open="isAlertModalVisible" @on-close="isAlertModalVisible = false"></AlertModal>
 </template>

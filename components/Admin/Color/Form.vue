@@ -1,7 +1,4 @@
 <template>
-    <!-- <div>
-        Category Form
-    </div> -->
     <div>
         <div class="flex items-center justify-between">
             <Heading :title="title" :description="description">
@@ -18,7 +15,17 @@
                     <FormItem>
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Category Name" v-bind="componentField" :disabled="isLoading" />
+                        <Input placeholder="Color Name" v-bind="componentField" :disabled="isLoading" />
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                </FormField>
+                <FormField v-slot="{ componentField }" name="value">
+                    <FormItem>
+                      <FormLabel>Color Code</FormLabel>
+                      <FormControl>
+                        <Input type="color" placeholder="#000000" v-bind="componentField" :disabled="isLoading" />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -28,8 +35,7 @@
             <Button :disabled="isLoading" type="submit" class="ml-auto">{{ action }}</Button>
         </form>
     </div>
-    <!-- <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory"></AlertModal> -->
-    <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteCategory" 
+    <AlertModal v-if="isAlertModalVisible" @on-confirm="deleteColor" 
                 :is-open="isAlertModalVisible" @on-close="isAlertModalVisible = false"></AlertModal>
 </template>
 
@@ -40,31 +46,32 @@ import { useForm } from 'vee-validate'
 
 const { isLoading, showMessage, showError, toggleLoading, toggleError } = useStore()
 
-const title = ref('Add Category')
-const description = ref('Edit Category')
-const toastMessage = ref('Category Updated')
+const title = ref('Add Color')
+const description = ref('Edit Color')
+const toastMessage = ref('Color Updated')
 const action = ref('Save Changes')
 const isEditing = ref(true)
 const isAlertModalVisible = ref(false)
 
 const route = useRoute()
-const { data: currentCategory } = await useFetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`)
+const { data: currentColor } = await useFetch(`/api/admin/colors/${(route.params as RouteParams).colorId}`)
 
 watchEffect(() => {
-    if(!currentCategory.value) {
-        title.value = 'Create Category'
-        description.value = 'Add a new Category'
-        action.value = 'Create Category'
+    if(!currentColor.value) {
+        title.value = 'Create Color'
+        description.value = 'Add a new Color'
+        action.value = 'Create Color'
         isEditing.value = false
-        toastMessage.value = 'Category Added'
+        toastMessage.value = 'Color Added'
     }
 })
 
-const formSchema = toTypedSchema(categorySchema)
+const formSchema = toTypedSchema(colorSchema)
 const form = useForm({
     validationSchema: formSchema,
-    initialValues: currentCategory.value || {
-        name: ''
+    initialValues: currentColor.value || {
+        name: '',
+        value: '#000000'
     }
 })
 
@@ -73,24 +80,20 @@ const onSubmit = form.handleSubmit(async (values) => {
         toggleLoading(true)
 
         if(isEditing.value) {
-            // console.log('Edit Category ', values)
-            const data = await $fetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`, {
+            const data = await $fetch(`/api/admin/colors/${(route.params as RouteParams).colorId}`, {
                 method: 'PATCH',
                 body: values
             })
         } else {
-            // console.log('Add Category ', values)
-            const data = await $fetch('/api/admin/categories/', {
+            const data = await $fetch('/api/admin/colors/', {
                 method: 'POST',
                 body: values
             })
-            // console.log(data)
         }
         showMessage({
             title: toastMessage.value
         })
-        // TODO refresh data
-        await navigateTo('/admin/categories')
+        await navigateTo('/admin/colors')
     } catch (error) {
         const err = handlerError(error)
         showError(err)
@@ -99,19 +102,16 @@ const onSubmit = form.handleSubmit(async (values) => {
     }
 })
 
-const deleteCategory = async () => {
+const deleteColor = async () => {
     try {
         toggleLoading(true)
-        const data = await $fetch(`/api/admin/categories/${(route.params as RouteParams).categoryId}`, {
+        const data = await $fetch(`/api/admin/colors/${(route.params as RouteParams).colorId}`, {
             method: 'DELETE',
         })
-        // console.log(data)
-        // console.log('Delete Category')
         showMessage({
             title: title.value
         })
-        // TODO refresh data
-        await navigateTo('/admin/categories')
+        await navigateTo('/admin/colors')
     } catch (error) {
         const err = handlerError(error)
         showError(err)

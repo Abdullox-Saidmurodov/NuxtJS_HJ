@@ -7,7 +7,7 @@ const props = defineProps<{
 function copy(id: string) {
   navigator.clipboard.writeText(id)
   showMessage({
-    title: 'Color Id'
+    title: 'Color Id copied'
   })
 }
 const { showMessage, showError, toggleLoading } = useStore()
@@ -15,13 +15,12 @@ const isAlertModalVisible = ref(false)
 const deleteColor = async () => {
     try {
         toggleLoading(true)
-        const data = await $fetch(`/api/admin/categories/${props.color.id}`, {
+        const data = await $fetch(`/api/admin/colors/${props.color.id}`, {
             method: 'DELETE',
         })
         showMessage({
             title: 'Delete Color'
         })
-        // TODO refresh data
         refreshNuxtData('colors')
     } catch (error) {
         const err = handlerError(error)
@@ -45,7 +44,7 @@ const deleteColor = async () => {
             <Icon name="lucide:copy" class="w-4 h-4" />
             <span>Copy ID</span>
           </DropdownMenuItem>
-          <DropdownMenuItem @click="navigateTo(`/admin/categories/${color.id}`)">
+          <DropdownMenuItem @click="navigateTo(`/admin/colors/${color.id}`)">
             <Icon name="lucide:edit" class="w-4 h-4" />
             <span>Edit</span>
           </DropdownMenuItem>
