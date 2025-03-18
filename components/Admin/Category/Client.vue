@@ -1,8 +1,5 @@
 <template>
     <div class="flex items-center justify-between">
-        <Heading title="Categories" description="Manage Categories">
-            
-        </Heading>
         <NuxtLink to="/admin/categories/new">
             <Button>
                 <Icon name="lucide:plus" class="mr-2 h-4 w-4"></Icon>
@@ -10,10 +7,6 @@
             </Button>
         </NuxtLink>
     </div>
-    <!-- <pre>
-        {{ data }}
-    </pre> -->
-    <!-- @vue-expect-error -->
     <DataTable v-if="status !== 'pending'" :columns="columns" column-to-search="name" :data="categories ? categories : []"></DataTable>
 </template>
 

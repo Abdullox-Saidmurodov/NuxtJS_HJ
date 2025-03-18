@@ -19,5 +19,5 @@ export default defineEventHandler(async (event) => {
             statusMessage: "Unauthorized. You don't have admin access"
         })
     }
-    return null
+    // return null
 })

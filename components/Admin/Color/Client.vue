@@ -10,9 +10,6 @@
             </Button>
         </NuxtLink>
     </div>
-    <!-- <pre>
-        {{ data }}
-    </pre> -->
     <DataTable v-if="status !== 'pending'" :columns="columns" column-to-search="name" :data="colors ? colors : []"></DataTable>
 </template>
 
