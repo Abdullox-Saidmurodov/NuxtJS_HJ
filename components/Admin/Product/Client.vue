@@ -34,7 +34,7 @@ const { data: products, status } = await useFetch('/api/admin/products', {
         })
     }
 })
-console.log("products", products)
+// console.log("products", products)
 
 </script>
 

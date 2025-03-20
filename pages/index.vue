@@ -1,29 +1,40 @@
 <template>
-    <div>
-        Home Page
-    </div>
-    <pre>{{ user }}</pre>
-    <NuxtLink to="/auth/login" >Login</NuxtLink>
-    <NuxtLink to="/auth/register" >Register</NuxtLink>
-    <NuxtLink to="/admin" >Admin</NuxtLink>
-    <NuxtLink to="/admin/categories" >Categories</NuxtLink>
-    <NuxtLink to="/admin/colors" >Colors</NuxtLink>
-    <NuxtLink to="/admin/sizes" >Sizes</NuxtLink>
-    <NuxtLink to="/admin/product/new" >Add Product</NuxtLink>
-
-    <button @click="logout">Logout</button>
+     <Hero></Hero>
+     <div class="mx-auto w-full max-w-5xl py-16 sm:py-32">
+        <div class="flex flex-col gap-y-8 px-4 sm:px-6 lg:px-8">
+            <!-- @vue-expect-error -->
+            <ProductList :items="product" title="Featured Products" :is-loading="status === 'pending'"></ProductList>
+        </div>
+     </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-    middleware: 'auth'
-})
-const { user, clear } = useUserSession()
+// import type { Product } from '@prisma/client';
 
-const logout = async () => {
-    await clear()
-    navigateTo('/auth/login')
-}
+// const { data: products, status } = await useFetch<Product>('/api/admin/products', {
+//     key: 'products',
+//     transform: (products) => {
+//         // @ts-ignore
+//         return products.map(item => {
+//             return {
+//                 id: item.id,
+//                 name: item.name,
+//                 price: formatter.format(+item.price),
+//                 isFeatured: item.isFeatured,
+//                 isArchived: item.isArchived,
+//                 category: item.category.name,
+//                 size: item.size.value,
+//                 color: item.color.value,
+//                 createdAt: useDateFormat(new Date(item.createdAt), 'MMMM D, YYYY').value,
+//             }
+//         })
+//     }
+// })
+import type { SafeProduct } from '~/types'
+
+const { data: product, status, } = await useFetch<SafeProduct[]>('/api/admin/products', {
+    lazy: true
+})
 </script>
 
 <style scoped>
