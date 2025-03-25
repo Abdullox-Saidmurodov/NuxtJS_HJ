@@ -41,6 +41,7 @@ const route = useRoute()
 const colorId = computed(() => (route.query as RouteParams).colorId)
 const sizeId = computed(() => (route.query as RouteParams).sizeId)
 const categoryId = computed(() => (route.query as RouteParams).categoryId)
+// console.log("categoryId.value", categoryId.value)
 const { data: product, status, } = await useFetch<SafeProduct[]>('/api/admin/products', {
     lazy: true,
     query: {
@@ -49,6 +50,7 @@ const { data: product, status, } = await useFetch<SafeProduct[]>('/api/admin/pro
         colorId: colorId
     }
 })
+// console.log("product", product)
 const { data: cachedSizes } = useNuxtData('sizes')
 const { data: sizes, status: sizeStatus } = await useFetch('/api/admin/sizes', {
     key: 'sizes',

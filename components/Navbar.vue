@@ -77,7 +77,7 @@
                 <NuxtLink to="/cart">
                     <Button class="relative rounded-full px-5 py-1 h-8">
                         <Icon name="lucide:shopping-bag" class="h-4 w-4 mr-2"></Icon>
-                        5
+                        {{ cartItem ? cartItem.length : 0 }}
                     </Button>
                 </NuxtLink>
             </nav>
@@ -91,6 +91,7 @@ const logout = async () => {
     await clear()
     navigateTo('/auth/login')
 }
+const { cartItem } = useCart()
 </script>
 
 <style scoped>

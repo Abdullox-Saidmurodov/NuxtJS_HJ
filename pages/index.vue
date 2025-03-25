@@ -9,30 +9,9 @@
 </template>
 
 <script setup lang="ts">
-// import type { Product } from '@prisma/client';
-
-// const { data: products, status } = await useFetch<Product>('/api/admin/products', {
-//     key: 'products',
-//     transform: (products) => {
-//         // @ts-ignore
-//         return products.map(item => {
-//             return {
-//                 id: item.id,
-//                 name: item.name,
-//                 price: formatter.format(+item.price),
-//                 isFeatured: item.isFeatured,
-//                 isArchived: item.isArchived,
-//                 category: item.category.name,
-//                 size: item.size.value,
-//                 color: item.color.value,
-//                 createdAt: useDateFormat(new Date(item.createdAt), 'MMMM D, YYYY').value,
-//             }
-//         })
-//     }
-// })
 import type { SafeProduct } from '~/types'
 
-const { data: product, status, } = await useFetch<SafeProduct[]>('/api/admin/products', {
+const { data: product, status, } = await useFetch<SafeProduct[]>(`/api/admin/products?isFeatured=true`, {
     lazy: true
 })
 </script>

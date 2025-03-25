@@ -21,7 +21,7 @@
 import type { Category, Color, Size } from '@prisma/client';
 
 interface FilterProps {
-    data: Size[]
+    sizes: Size[]
     colors: Color[]
     categories: Category[]
 }

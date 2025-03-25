@@ -25,7 +25,7 @@
                 <h3 class="mt-4 font-bold text-gray-900">{{ data.name }}</h3>
                 <p class="italic text-gray-500">{{ data.category.name }}</p>
                 <p class="mt-2 font-medium text-foreground">${{ data.price }}</p>
-                <Button variant="secondary" class="mt-4 w-full">
+                <Button type="button" @click="addItem(data)" variant="secondary" class="mt-4 w-full">
                     Add to cart
                 </Button>
             </CardContent>
@@ -41,6 +41,7 @@ defineProps<{
     data: SafeProduct
 }>();
 const { onOpen } = usePreviewModal()
+const { addItem } = useCart()
 </script>
 
 <style scoped>
