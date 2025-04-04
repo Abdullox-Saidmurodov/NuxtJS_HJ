@@ -1,4 +1,5 @@
 import db from "~/utils/db"
+import { stripe } from "~/server/utils/stripe"
 
 export default defineEventHandler(async(event) => {
     const productIds = await readBody(event)
@@ -30,5 +31,30 @@ export default defineEventHandler(async(event) => {
         }
     })
     // Stripe Session
-    return order
+    const session = await stripe.checkout.sessions.create({
+        line_items: products.map(product => {
+            return {
+                quantity: 1,
+                price_data: {
+                    currency: 'USD',
+                    product_data: {
+                        name: product.name
+                    },
+                    unit_amount: product.price * 100
+                }
+            }
+        }),
+        mode: 'payment',
+        billing_address_collection: 'required',
+        phone_number_collection: {
+            enabled: true
+        },
+        success_url: `http://localhost:3000/cart?success=1`,
+        cancel_url: `http://localhost:3000/cart?canceled=1`,
+        metadata: {
+            orderId: order.id
+        }
+    })
+    // return order
+    return session.url
 })

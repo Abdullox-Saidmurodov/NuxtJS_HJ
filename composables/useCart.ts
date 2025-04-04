@@ -5,7 +5,7 @@ interface CartState {
 }
 
 const state = reactive<CartState>({
-    items: getLocalStorageData<SafeProduct[]>('cart-storage') ? getLocalStorageData<SafeProduct[]>('cart-storage') : []
+    items: getLocalStorageData<SafeProduct[]>('cart-storage-youtube') ? getLocalStorageData<SafeProduct[]>('cart-storage-youtube') : []
 })
 
 export default () => {
